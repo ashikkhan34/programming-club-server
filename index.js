@@ -70,7 +70,7 @@ async function run() {
       }
 
         //check admin
-    app.get("/users/admin/:email",async(req,res) =>{
+    app.get("/users/admin/:email", verifyToken,async(req,res) =>{
       const email = req.params.email;
       if(email !== req.decoded.email){
         return res.status(403).send({message:'forbidden access'})
@@ -87,7 +87,7 @@ async function run() {
 
  
        //update a specific person
-      app.patch('/users/admin/:id', async(req,res) =>{
+      app.patch('/users/admin/:id',verifyToken,verifyAdmin, async(req,res) =>{
         const id = req.params.id;
         const filter = {_id : new ObjectId(id)}
         const updatedDoc = {
@@ -154,7 +154,7 @@ async function run() {
 
 
     //update a specific member
-    app.get('/members/:id',async(req,res) =>{
+    app.get('/members/:id',verifyToken,verifyAdmin,async(req,res) =>{
       // const member = req.body
       const id = req.params.id
       const query = {_id : new ObjectId(id)}
@@ -163,7 +163,7 @@ async function run() {
     })
 
     //update a specific event data
-    app.get('/events/:id',async(req,res)=>{
+    app.get('/events/:id',verifyToken,verifyAdmin,async(req,res)=>{
       const id = req.params.id
       const query = {_id : new ObjectId(id)}
       const result = await eventCollection.findOne(query)
@@ -171,7 +171,7 @@ async function run() {
     })
 
     //update a members
-    app.patch('/members/:id',async(req,res) =>{
+    app.patch('/members/:id',verifyToken,verifyAdmin,async(req,res) =>{
       const member = req.body
       const id = req.params.id
       const filter = {_id : new ObjectId(id)}
@@ -189,7 +189,7 @@ async function run() {
     })
 
     //update event information
-    app.patch('/events/:id',async(req,res) =>{
+    app.patch('/events/:id',verifyToken,verifyAdmin,async(req,res) =>{
       const event = req.body;
       const id = req.params.id
       const query = {_id : new ObjectId(id)}
@@ -212,7 +212,7 @@ async function run() {
     })
 
      //delete a member from clint and db
-     app.delete('/members/:id',async(req,res) =>{
+     app.delete('/members/:id',verifyToken,verifyAdmin,async(req,res) =>{
       const id = req.params.id;
       const query = {_id: new ObjectId(id)}
       const result = await memberCollection.deleteOne(query)
