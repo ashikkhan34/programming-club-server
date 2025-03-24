@@ -36,6 +36,7 @@ async function run() {
     const eventCollection = client.db('programming_db').collection('events')
     const blogCollection = client.db('programming_db').collection('blogs')
     const photoCollection = client.db('programming_db').collection('photos')
+    const registerEventCollection = client.db('programming_db').collection('eventsMember')
 
 
 
@@ -270,6 +271,28 @@ async function run() {
     //get all photo
     app.get('/photos',async(req,res) =>{
       const result = await photoCollection.find().toArray()
+      res.send(result)
+    })
+
+
+    //create eventsmembers
+    app.post('/eventMembers',async(req,res) =>{
+      const member = req.body
+      const result = await registerEventCollection.insertOne(member)
+      res.send(result)
+    })
+
+    //GET ALL EVENTSMEMBERS
+    app.get('/eventMembers',async(req,res) =>{
+      const result = await registerEventCollection.find().toArray()
+      res.send(result)
+    })
+
+    //delete a eventmember
+    app.delete('/eventMembers/:id',async(req,res) =>{
+      const id = req.params.id
+      const query = {_id : new ObjectId(id)}
+      const result = await registerEventCollection.deleteOne(query)
       res.send(result)
     })
 
